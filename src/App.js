@@ -22,9 +22,20 @@ export default function TextModifierApp() {
 		if (!modOpts.repeat) {
 			modOpts.repeat = 10;
 		}
+		if (!modOpts.charShift) {
+			modOpts.charShift = Math.random();
+		}
 
 		text += "\n";
 		text = text.repeat(modOpts.repeat);
+
+		text = text.split("").map(
+			e => ~~(e.charCodeAt(0) + (modOpts.charShift/2 > Math.random() ? ((Math.random()*10*modOpts.charShift) - 5*modOpts.charShift) : 0))
+		).filter(
+			e => e >= 0
+		).map(
+			e => String.fromCodePoint(e)
+		).join("")
 
 		text = text.split("").map(
 			e => e + (Math.random() < modOpts.spacing/2 ? " " : "")

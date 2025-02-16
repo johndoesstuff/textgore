@@ -8,8 +8,32 @@ export default function TextModifierApp() {
 	const [modifiedText, setModifiedText] = useState("");
 
 	const modifyText = () => {
-		setModifiedText(text.toUpperCase()); // Example modification
+		setModifiedText(destroyText(text));
 	};
+
+	const destroyText = (text, modOpts) => {
+		if (!modOpts) {
+			modOpts = {};
+		}
+		if (!modOpts.spacing) {
+			modOpts.spacing = Math.random();
+		}
+		if (!modOpts.repeat) {
+			modOpts.repeat = 1;
+		}
+
+		text = text.repeat(modOpts.repeat);
+
+		text = text.split("").map(
+			e => e + (Math.random() < modOpts.spacing/2 ? " " : "")
+		).join("").split("").map(
+			e => e + (Math.random() < modOpts.spacing/6 ? "\t" : "")
+		).join("").split("").map(
+			e => e + (Math.random() < modOpts.spacing/20 ? "\n" : "")
+		).join("");
+
+		return text;
+	}
 
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(modifiedText);
@@ -17,7 +41,6 @@ export default function TextModifierApp() {
 
 	return (
 		<div className="container">
-			{/* Input Section */}
 			<div className="card">
 				<div className="input-group">
 					<input
@@ -28,12 +51,11 @@ export default function TextModifierApp() {
 						className="input"
 					/>
 					<button className="button" onClick={modifyText}>
-						Modify Text
+						Destroy!
 					</button>
 				</div>
 			</div>
 
-			{/* Output Section */}
 			<div className="card">
 				<textarea readOnly value={modifiedText} className="textarea"></textarea>
 				<button className="button" onClick={copyToClipboard}>

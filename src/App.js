@@ -81,12 +81,20 @@ const supplementals = {
 	],
 }
 
+const isValidUnicode = (ch) => ch != "�" && (ch.charCodeAt(0) >= 0xD800 && ch.charCodeAt(0) <= 0xDFFF);
+
 const randCharInRange = (r0, r1) => {
-	return String.fromCodePoint(~~(Math.random() * (parseInt(r1, 16) - parseInt(r0, 16)+1) + parseInt(r0, 16)))
+	let s = String.fromCodePoint(~~(Math.random() * (parseInt(r1, 16) - parseInt(r0, 16)+1) + parseInt(r0, 16)));
+	let i = 0;
+	while (!isValidUnicode(s) && i < 10) {
+		s = String.fromCodePoint(~~(Math.random() * (parseInt(r1, 16) - parseInt(r0, 16)+1) + parseInt(r0, 16)));
+		i++;
+	}
+	return s;
 }
 
 const charsFromRanges = (ranges, n) => {
-	return Array(n).fill(0).map(e => randCharInRange(...ranges[~~(Math.random()*ranges.length)])).join("")
+	return Array(n).fill(0).map(e => randCharInRange(...ranges[~~(Math.random()*ranges.length)])).join("");
 }
 
 const destroyText = (text, modOpts) => {
@@ -120,8 +128,8 @@ const destroyText = (text, modOpts) => {
 	console.log(JSON.stringify(modOpts));
 
 	//repeat
-	text += "\n";
 	if (!modOpts.progressive) {
+		text += "\n";
 		text = text.repeat(modOpts.repeat);
 	} else {
 		let newText = "";
@@ -180,11 +188,21 @@ export default function TextModifierApp() {
 	const [text, setText] = useState("The limits of my language means the limits of my world.");
 	const [modifiedText, setModifiedText] = useState("");
 	const textareaRef = useRef(null);
+	const [modOpts, setModOpts] = useState({
+		spacing: 0.5,
+		repeat: 10,
+		progressive: false,
+		charShift: 0.3,
+		supplementals: 0.2,
+		supSet: "latinExt",
+		caseSwap: 0.1,
+		deform: 0.4,
+	});
+	const [showOptions, setShowOptions] = useState(false);
 
 	const modifyText = () => {
-		setModifiedText(destroyText(text));
+		setModifiedText(destroyText(text, modOpts));
 	};
-
 
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(modifiedText);
@@ -221,6 +239,70 @@ export default function TextModifierApp() {
 				</div>
 			</div>
 
+			<div className="options card">
+				<div className="options-panel">
+					<div className="option-item">
+						<label>Spacing: {modOpts.spacing.toFixed(2)}</label>
+						<input type="range" min="0" max="1" step="0.05"
+							value={modOpts.spacing}
+						onChange={(e) => {setModOpts({ ...modOpts, spacing: parseFloat(e.target.value) }); modifyText()}} />
+					</div>
+
+					<div className="option-item">
+						<label>Repeat: {modOpts.repeat}</label>
+						<input type="range" min="1" max="20" step="1"
+							value={modOpts.repeat}
+						onChange={(e) => {setModOpts({ ...modOpts, repeat: parseInt(e.target.value) }); modifyText()}} />
+					</div>
+
+					<div className="option-item">
+						<label>Character Shift: {modOpts.charShift.toFixed(2)}</label>
+						<input type="range" min="0" max="1" step="0.05"
+							value={modOpts.charShift}
+						onChange={(e) => {setModOpts({ ...modOpts, charShift: parseFloat(e.target.value) }); modifyText()}} />
+					</div>
+
+					<div className="option-item">
+						<label>Supplementals: {modOpts.supplementals.toFixed(2)}</label>
+						<input type="range" min="0" max="1" step="0.05"
+							value={modOpts.supplementals}
+						onChange={(e) => {setModOpts({ ...modOpts, supplementals: parseFloat(e.target.value) }); modifyText();}} />
+					</div>
+
+					<div className="option-item">
+						<label>Supplemental Set:</label>
+						<select value={modOpts.supSet} onChange={(e) => {setModOpts({ ...modOpts, supSet: e.target.value }); modifyText()}}>
+							{Object.keys(supplementals).map(set => (
+								<option key={set} value={set}>{set}</option>
+							))}
+						</select>
+					</div>
+
+					<div className="option-item">
+						<label>Case Swap: {modOpts.caseSwap.toFixed(2)}</label>
+						<input type="range" min="0" max="1" step="0.05"
+							value={modOpts.caseSwap}
+						onChange={(e) => {setModOpts({ ...modOpts, caseSwap: parseFloat(e.target.value) }); modifyText()}} />
+					</div>
+
+					<div className="option-item">
+						<label>Deform: {modOpts.deform.toFixed(2)}</label>
+						<input type="range" min="0" max="1" step="0.05"
+							value={modOpts.deform}
+						onChange={(e) => {setModOpts({ ...modOpts, deform: parseFloat(e.target.value) }); modifyText()}} />
+					</div>
+
+					<div className="option-item">
+						<label>
+							Progressive:
+							<input type="checkbox"
+								checked={modOpts.progressive}
+							onChange={(e) => {setModOpts({ ...modOpts, progressive: e.target.checked })}} />
+						</label>
+					</div>
+				</div>
+			</div>
+
 			<div className="card">
 				<textarea ref={textareaRef} readOnly value={modifiedText} className="textarea"></textarea>
 				<button className="button" onClick={copyToClipboard}>
@@ -230,4 +312,3 @@ export default function TextModifierApp() {
 		</div>
 	);
 }
-

@@ -1,5 +1,5 @@
 .container {
-	width: 80vw;
+	width: 60vw;
 	margin: 40px auto;
 	display: flex;
 	flex-direction: column;
@@ -48,5 +48,33 @@
 
 .button:hover {
 	background-color: #0056b3;
+}
+
+.options {
+	margin: 10px 0;
+}
+
+.option-item {
+	display: flex;
+	flex-direction: column;
+}
+
+.options-panel {
+	padding: 10px;
+	border-radius: 5px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 10px;
+}
+
+.options-panel label {
+	display: block;
+	margin-top: 5px;
+	font-size: 14px;
+}
+
+.options-panel input, .options-panel select {
+	width: 100%;
+	margin-bottom: 5px;
 }
 

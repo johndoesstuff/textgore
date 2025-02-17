@@ -221,6 +221,9 @@ export default function TextModifierApp() {
 	};
 
 	useEffect(resizeTextarea, [modifiedText]);
+	useEffect(() => {
+		modifyText();
+	}, [modOpts]);
 
 	return (
 		<div className="container">
@@ -245,33 +248,33 @@ export default function TextModifierApp() {
 						<label>Spacing: {modOpts.spacing.toFixed(2)}</label>
 						<input type="range" min="0" max="1" step="0.05"
 							value={modOpts.spacing}
-						onChange={(e) => {setModOpts({ ...modOpts, spacing: parseFloat(e.target.value) }); modifyText()}} />
+						onChange={(e) => setModOpts({ ...modOpts, spacing: parseFloat(e.target.value) })} />
 					</div>
 
 					<div className="option-item">
 						<label>Repeat: {modOpts.repeat}</label>
 						<input type="range" min="1" max="20" step="1"
 							value={modOpts.repeat}
-						onChange={(e) => {setModOpts({ ...modOpts, repeat: parseInt(e.target.value) }); modifyText()}} />
+						onChange={(e) => setModOpts({ ...modOpts, repeat: parseInt(e.target.value) })} />
 					</div>
 
 					<div className="option-item">
 						<label>Character Shift: {modOpts.charShift.toFixed(2)}</label>
 						<input type="range" min="0" max="1" step="0.05"
 							value={modOpts.charShift}
-						onChange={(e) => {setModOpts({ ...modOpts, charShift: parseFloat(e.target.value) }); modifyText()}} />
+						onChange={(e) => setModOpts({ ...modOpts, charShift: parseFloat(e.target.value) })} />
 					</div>
 
 					<div className="option-item">
 						<label>Supplementals: {modOpts.supplementals.toFixed(2)}</label>
 						<input type="range" min="0" max="1" step="0.05"
 							value={modOpts.supplementals}
-						onChange={(e) => {setModOpts({ ...modOpts, supplementals: parseFloat(e.target.value) }); modifyText();}} />
+						onChange={(e) => setModOpts({ ...modOpts, supplementals: parseFloat(e.target.value) })} />
 					</div>
 
 					<div className="option-item">
 						<label>Supplemental Set:</label>
-						<select value={modOpts.supSet} onChange={(e) => {setModOpts({ ...modOpts, supSet: e.target.value }); modifyText()}}>
+						<select value={modOpts.supSet} onChange={(e) => setModOpts({ ...modOpts, supSet: e.target.value })}>
 							{Object.keys(supplementals).map(set => (
 								<option key={set} value={set}>{set}</option>
 							))}
@@ -282,14 +285,14 @@ export default function TextModifierApp() {
 						<label>Case Swap: {modOpts.caseSwap.toFixed(2)}</label>
 						<input type="range" min="0" max="1" step="0.05"
 							value={modOpts.caseSwap}
-						onChange={(e) => {setModOpts({ ...modOpts, caseSwap: parseFloat(e.target.value) }); modifyText()}} />
+						onChange={(e) => setModOpts({ ...modOpts, caseSwap: parseFloat(e.target.value) })} />
 					</div>
 
 					<div className="option-item">
 						<label>Deform: {modOpts.deform.toFixed(2)}</label>
 						<input type="range" min="0" max="1" step="0.05"
 							value={modOpts.deform}
-						onChange={(e) => {setModOpts({ ...modOpts, deform: parseFloat(e.target.value) }); modifyText()}} />
+						onChange={(e) => setModOpts({ ...modOpts, deform: parseFloat(e.target.value) })} />
 					</div>
 
 					<div className="option-item">
@@ -297,7 +300,7 @@ export default function TextModifierApp() {
 							Progressive:
 							<input type="checkbox"
 								checked={modOpts.progressive}
-							onChange={(e) => {setModOpts({ ...modOpts, progressive: e.target.checked })}} />
+							onChange={(e) => setModOpts({ ...modOpts, progressive: e.target.checked })} />
 						</label>
 					</div>
 				</div>

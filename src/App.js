@@ -148,11 +148,6 @@ const destroyText = (text, modOpts) => {
 		return text;
 	}
 
-	//deform
-	text = text.split("").map(
-		e => Object.keys(charMap).includes(e) && Math.random() < modOpts.deform/2 ? charMap[e][~~(Math.random()*charMap[e].length)] : e
-	).join("");
-
 	//char shift
 	text = text.split("").map(
 		e => ~~(e.charCodeAt(0) + (modOpts.charShift/2 > Math.random() ? ((Math.random()*10*modOpts.charShift) - 5*modOpts.charShift) : 0))
@@ -160,6 +155,11 @@ const destroyText = (text, modOpts) => {
 		e => e >= 0
 	).map(
 		e => String.fromCodePoint(e)
+	).join("");
+
+	//deform
+	text = text.split("").map(
+		e => Object.keys(charMap).includes(e) && Math.random() < modOpts.deform/2 ? charMap[e][~~(Math.random()*charMap[e].length)] : e
 	).join("");
 
 	//supplementals
@@ -189,20 +189,32 @@ export default function TextModifierApp() {
 	const [modifiedText, setModifiedText] = useState("");
 	const textareaRef = useRef(null);
 	const [modOpts, setModOpts] = useState({
-		spacing: 0.5,
+		spacing: 0.4,
 		repeat: 10,
-		progressive: false,
-		charShift: 0.3,
+		progressive: true,
+		charShift: 0.1,
 		supplementals: 0.2,
 		supSet: "latinExt",
 		caseSwap: 0.1,
-		deform: 0.4,
+		deform: 0.3,
 	});
-	const [showOptions, setShowOptions] = useState(false);
 
 	const modifyText = () => {
 		setModifiedText(destroyText(text, modOpts));
 	};
+
+	const randomize = () => {
+		setModOpts({
+			spacing: Math.random(),
+			repeat: 10,
+			progressive: Math.random() < 0.5,
+			charShift: Math.random(),
+			supplementals: Math.random(),
+			supSet: Object.keys(supplementals)[~~(Object.keys(supplementals).length*Math.random())],
+			caseSwap: Math.random(),
+			deform: Math.random(),
+		});
+	}
 
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(modifiedText);
@@ -225,8 +237,13 @@ export default function TextModifierApp() {
 		modifyText();
 	}, [modOpts]);
 
+	useEffect(() => {
+		document.title = "TextGore";
+	}, []);
+
 	return (
 		<div className="container">
+			<h1>TextGore</h1>
 			<div className="card">
 				<div className="input-group">
 					<input
@@ -236,6 +253,9 @@ export default function TextModifierApp() {
 						onChange={(e) => setText(e.target.value)}
 						className="input"
 					/>
+					<button className="button" onClick={randomize}>
+						Randomize!
+					</button>
 					<button className="button" onClick={modifyText}>
 						Destroy!
 					</button>
@@ -246,7 +266,7 @@ export default function TextModifierApp() {
 				<div className="options-panel">
 					<div className="option-item">
 						<label>Spacing: {modOpts.spacing.toFixed(2)}</label>
-						<input type="range" min="0" max="1" step="0.05"
+						<input type="range" min="0" max="1" step="0.01"
 							value={modOpts.spacing}
 						onChange={(e) => setModOpts({ ...modOpts, spacing: parseFloat(e.target.value) })} />
 					</div>
@@ -260,14 +280,14 @@ export default function TextModifierApp() {
 
 					<div className="option-item">
 						<label>Character Shift: {modOpts.charShift.toFixed(2)}</label>
-						<input type="range" min="0" max="1" step="0.05"
+						<input type="range" min="0" max="1" step="0.01"
 							value={modOpts.charShift}
 						onChange={(e) => setModOpts({ ...modOpts, charShift: parseFloat(e.target.value) })} />
 					</div>
 
 					<div className="option-item">
 						<label>Supplementals: {modOpts.supplementals.toFixed(2)}</label>
-						<input type="range" min="0" max="1" step="0.05"
+						<input type="range" min="0" max="1" step="0.01"
 							value={modOpts.supplementals}
 						onChange={(e) => setModOpts({ ...modOpts, supplementals: parseFloat(e.target.value) })} />
 					</div>
@@ -283,14 +303,14 @@ export default function TextModifierApp() {
 
 					<div className="option-item">
 						<label>Case Swap: {modOpts.caseSwap.toFixed(2)}</label>
-						<input type="range" min="0" max="1" step="0.05"
+						<input type="range" min="0" max="1" step="0.01"
 							value={modOpts.caseSwap}
 						onChange={(e) => setModOpts({ ...modOpts, caseSwap: parseFloat(e.target.value) })} />
 					</div>
 
 					<div className="option-item">
 						<label>Deform: {modOpts.deform.toFixed(2)}</label>
-						<input type="range" min="0" max="1" step="0.05"
+						<input type="range" min="0" max="1" step="0.01"
 							value={modOpts.deform}
 						onChange={(e) => setModOpts({ ...modOpts, deform: parseFloat(e.target.value) })} />
 					</div>

@@ -1,0 +1,4 @@
+[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=https://cloudconvert.com/
+HostUrl=https://us-east.storage.cloudconvert.com/tasks/344376bc-17cf-49de-b78c-8b7ea514f717/textgore.ico?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=cloudconvert-production%2F20250217%2Fva%2Fs3%2Faws4_request&X-Amz-Date=20250217T030409Z&X-Amz-Expires=86400&X-Amz-Signature=b13736b4b1e9618171a305f25d9d55953c22e5ca0faf18b07877c68890a99179&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22textgore.ico%22&response-content-type=image%2Fvnd.microsoft.icon&x-id=GetObject

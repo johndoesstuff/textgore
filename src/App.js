@@ -110,6 +110,9 @@ const destroyText = (text, modOpts) => {
 	if (modOpts.progressive === undefined) {
 		modOpts.progressive = Math.random() < 0.5;
 	}
+	if (modOpts.removeNewline === undefined) {
+		modOpts.removeNewline = Math.random() < 0.5;
+	}
 	if (modOpts.charShift === undefined) {
 		modOpts.charShift = Math.random()**2;
 	}
@@ -181,6 +184,11 @@ const destroyText = (text, modOpts) => {
 		e => Math.random() < modOpts.caseSwap/2 ? (e === e.toUpperCase() ? e.toLowerCase() : e.toUpperCase()) : e
 	).join("");
 
+	//remove newline
+	if (modOpts.removeNewline) {
+		text = text.split("\n").join("");
+	}
+
 	return text;
 }
 
@@ -192,6 +200,7 @@ export default function TextModifierApp() {
 		spacing: 0.4,
 		repeat: 10,
 		progressive: true,
+		removeNewline: false,
 		charShift: 0.1,
 		supplementals: 0.2,
 		supSet: "latinExt",
@@ -206,7 +215,7 @@ export default function TextModifierApp() {
 	const randomize = () => {
 		setModOpts({
 			spacing: Math.random(),
-			repeat: 10,
+			removeNewline: Math.random() < 0.5,
 			progressive: Math.random() < 0.5,
 			charShift: Math.random()**2,
 			supplementals: Math.random()**2,
@@ -321,6 +330,15 @@ export default function TextModifierApp() {
 							<input type="checkbox"
 								checked={modOpts.progressive}
 							onChange={(e) => setModOpts({ ...modOpts, progressive: e.target.checked })} />
+						</label>
+					</div>
+					
+					<div className="option-item">
+						<label>
+							Remove Newline:
+							<input type="checkbox"
+								checked={modOpts.removeNewline}
+							onChange={(e) => setModOpts({ ...modOpts, removeNewline: e.target.checked })} />
 						</label>
 					</div>
 				</div>

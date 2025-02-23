@@ -27,6 +27,7 @@
 
 .textarea {
 	width: -webkit-fill-available;
+	width: -moz-available;
 	height: 60px;
 	padding: 8px;
 	border: 1px solid #ccc;

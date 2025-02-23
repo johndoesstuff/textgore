@@ -208,11 +208,11 @@ export default function TextModifierApp() {
 			spacing: Math.random(),
 			repeat: 10,
 			progressive: Math.random() < 0.5,
-			charShift: Math.random(),
-			supplementals: Math.random(),
+			charShift: Math.random()**2,
+			supplementals: Math.random()**2,
 			supSet: Object.keys(supplementals)[~~(Object.keys(supplementals).length*Math.random())],
-			caseSwap: Math.random(),
-			deform: Math.random(),
+			caseSwap: Math.random()**4,
+			deform: Math.random()**3,
 		});
 	}
 
